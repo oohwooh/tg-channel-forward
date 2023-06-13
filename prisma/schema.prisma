@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  channel         Channel @relation(fields: [channelId], references: [id])
+  chat            Chat    @relation(fields: [chatId], references: [id])
+  post_channel_id String
+  post_chat_id    String
+  channelId       String
+  chatId          String
+
+  @@id([post_channel_id, post_chat_id])
+}
+
+model Channel {
+  id               String @id
+  forwards_to      Chat[]
+  forwards         Post[]
+  added_by_user_id String
+}
+
+model Chat {
+  id               String    @id
+  forwards_from    Channel[]
+  forwards         Post[]
+  added_by_user_id String
+}
