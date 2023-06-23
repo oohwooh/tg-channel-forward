@@ -102,7 +102,11 @@ bot.on('edited_channel_post', async (ctx) => {
     }
   })
   posts.forEach(async (post) => {
-    await bot.telegram.deleteMessage(post.chatId, parseInt(post.post_chat_id))
+    try {
+      await bot.telegram.deleteMessage(post.chatId, parseInt(post.post_chat_id))
+    } catch(e) {
+      console.error(e)
+    }
     const msg = await bot.telegram.forwardMessage(post.chatId, channel_id, source_id)
     // await bot.telegram.pinChatMessage(post.chatId, msg.message_id, { disable_notification: true })
     
